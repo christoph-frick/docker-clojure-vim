@@ -1,0 +1,33 @@
+#!/bin/sh
+
+if test x"$TMUX" = "x"; then
+	echo "Not in tmux" >&2
+	exit 1
+fi
+
+title=
+message=
+
+while test $# -gt 0; do
+	case "$1" in
+	-title) title="$2"; shift
+		;;
+	-message) message="$2"; shift
+		;;
+	*) ;;
+	esac
+	shift
+done
+
+fg="black"
+bg="yellow"
+case "$title$message" in
+*assed*) bg="green"
+	;;
+*ailed*) bg="red"
+	;;
+esac
+
+tmux set -gq message-style "fg=$fg,bg=$bg"
+tmux display-message "$message"
+tmux set -uq message-style
